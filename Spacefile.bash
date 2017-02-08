@@ -42,7 +42,7 @@
 YAML_PARSE()
 {
     SPACE_SIGNATURE="filepath outvarname"
-    SPACE_DEP="YAML_PARSE_IMPL _parse_yaml _yaml_get_next _yaml_get_row _yaml_get_multiline _parsed_yaml_to_bash _sort _sort_pad _yaml_find_nextindent _list _copy _match_node"
+    SPACE_DEP="YAML_PARSE_IMPL _parse_yaml _yaml_get_next _yaml_get_row _yaml_get_multiline _parsed_yaml_to_bash _sort _sort_pad _yaml_find_nextindent _list _copy _match_node _module_find_yaml"
     SPACE_ENV="_YAML_PREFIX _YAML_NAMESPACE _SPACEGAL_EOF_TAG"
 
     YAML_PARSE_IMPL "$@"
@@ -784,4 +784,56 @@ _match_node()
     unset _item _levels
     unset _match _matched
     unset _nodepath
+}
+
+#=============
+# _module_find_yaml
+#
+# Search for a modules YAML file using defaults and
+# trying all the different YAML file name variants.
+#
+# Parameters:
+#   $1: module name: [username/]reponame
+#   $2: variable name to assign found YAML file path to.
+#
+#=============
+_module_find_yaml()
+{
+    local _module=$1
+    shift
+
+    local _outvarname=$1
+    shift
+
+    local _domainname=""
+    local _username="space-sh"
+    local _reponame=$_module
+    if [[ $_module =~ (.+)/(.+)/(.+) ]]; then
+        _domainname=${BASH_REMATCH[1]}
+        _username=${BASH_REMATCH[2]}
+        _reponame=${BASH_REMATCH[3]}
+    elif [[ $_module =~ (.+)/(.+) ]]; then
+        _username=${BASH_REMATCH[1]}
+        _reponame=${BASH_REMATCH[2]}
+    fi
+    #[[ $_reponame =~ ([^:]+) ]]
+    #local _reponameclean=${BASH_REMATCH[1]}
+    unset _module
+
+    if [ "${_domainname}" = "" ]; then
+        if [ "${_username}" = "space-sh" ]; then
+            _domainname="gitlab.com"
+        fi
+    fi
+
+    local _dir= _f=
+    for _dir in ${_INCLUDEPATH[@]}; do
+        for _f in "$_dir/$_domainname/$_username/$_reponame/Spacefile.yaml"; do
+            if [[ -f $_f ]]; then
+                _debug "Found module $_f"
+                eval "$_outvarname=\$_f"
+                return
+            fi
+        done
+    done
 }
