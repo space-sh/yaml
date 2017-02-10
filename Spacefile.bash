@@ -114,7 +114,8 @@ _sort()
         for (( _i=0; _i<_last; _i++ )); do
             eval "local _line1=\${${_arrname}[$_i]}"
             eval "local _line2=\${${_arrname}[$((_i+1))]}"
-            local _line1padded= _line2padded=
+            local _line1padded=
+            local _line2padded=
             _sort_pad "_line1padded" "$_line1"
             _sort_pad "_line2padded" "$_line2"
             if [[ "${_line1padded}" > "${_line2padded}" ]]; then
@@ -160,9 +161,17 @@ _parse_yaml()
 
     local _numrows=${#_allrows[@]}
     local _rowindex=0
-    local _lastindent=0 _nodes=("/") _lastkey="" _prefix="/"
-    local _indent=0 _rowtype= _key= _readahead=() _nextindent=0
-    local _arrayextraindent= _output=
+    local _lastindent=0
+    local _nodes=("/")
+    local _lastkey=""
+    local _prefix="/"
+    local _indent=0
+    local _rowtype=
+    local _key=
+    local _readahead=()
+    local _nextindent=0
+    local _arrayextraindent=
+    local _output=
 
     while _yaml_get_next 0;
     do
@@ -585,7 +594,9 @@ _parsed_yaml_to_bash()
     local _allrows=()
     eval "_allrows=(\"\${"${_invarname}"[@]}\")"
 
-    local _line= _str= _varname=
+    local _line=
+    local _str=
+    local _varname=
     for _line in "${_allrows[@]}"; do
         if [[ -z $_varname ]]; then
             _varname="${_YAML_PREFIX}${_YAML_NAMESPACE}${_line}"
@@ -730,7 +741,9 @@ _match_node()
     local _includeleafs=${1:-0}
     shift || :
 
-    local _item= _node= _isleaf=
+    local _item=
+    local _node=
+    local _isleaf=
     local _nodelist=()
     eval '
     for _item in "${'$_inputname'[@]-}"; do
@@ -749,8 +762,10 @@ _match_node()
         return 0
     fi
 
-    local _item= _levels=
-    local _match= _matched=
+    local _item=
+    local _levels=
+    local _match=
+    local _matched=
 
     # Figure out how many levels we have by counting slashes.
     _levels=${_nodepath//[^\/]}
@@ -829,7 +844,8 @@ _module_find_yaml()
         fi
     fi
 
-    local _dir= _f=
+    local _dir=
+    local _f=
     for _dir in ${_INCLUDEPATH[@]}; do
         for _f in "$_dir/$_domainname/$_username/$_reponame/Spacefile.yaml"; do
             if [[ -f $_f ]]; then
