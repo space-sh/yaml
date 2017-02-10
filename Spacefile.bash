@@ -42,7 +42,9 @@
 YAML_PARSE()
 {
     SPACE_SIGNATURE="filepath outvarname"
+    # shellcheck disable=2034
     SPACE_DEP="YAML_PARSE_IMPL _parse_yaml _yaml_get_next _yaml_get_row _yaml_get_multiline _parsed_yaml_to_bash _sort _sort_pad _yaml_find_nextindent _list _copy _match_node _module_find_yaml"
+    # shellcheck disable=2034
     SPACE_ENV="_YAML_PREFIX _YAML_NAMESPACE _SPACEGAL_EOF_TAG"
 
     YAML_PARSE_IMPL "$@"
@@ -51,6 +53,7 @@ YAML_PARSE()
 # We use this internally for chainer functions to not pollute with SPACE_ENV.
 YAML_PARSE_IMPL()
 {
+    # shellcheck disable=2034
     SPACE_SIGNATURE="filepath outvarname"
 
     local _filepath=$1
