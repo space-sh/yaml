@@ -62,10 +62,13 @@ YAML_PARSE_IMPL()
     local _outvarname=$1
     shift
 
+    # shellcheck disable=2034
     local _parsedyamlcompletion=()
+    # shellcheck disable=2034
     local _parsedyaml=()
     local _yamlrows=()
 
+    # shellcheck disable=2034
     IFS=$'\n' read -d '' -r -a _yamlrows < $_filepath
 
     _parse_yaml "_yamlrows" "_parsedyaml" "_parsedyamlcompletion"
