@@ -119,7 +119,9 @@ _sort()
             eval "local _line2=\${${_arrname}[$((_i+1))]}"
             local _line1padded=
             local _line2padded=
+            # shellcheck disable=2154
             _sort_pad "_line1padded" "$_line1"
+            # shellcheck disable=2154
             _sort_pad "_line2padded" "$_line2"
             if [[ "${_line1padded}" > "${_line2padded}" ]]; then
                 eval "${_arrname}[$_i]=\"$_line2\""
