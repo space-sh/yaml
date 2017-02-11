@@ -747,7 +747,9 @@ _match_node()
     shift || :
 
     local _item=
+    # shellcheck disable=2034
     local _node=
+    # shellcheck disable=2034
     local _isleaf=
     local _nodelist=()
     eval '
