@@ -181,11 +181,11 @@ _parse_yaml()
     while _yaml_get_next 0;
     do
         # Set node prefix for changed indentation level.
-        if (($_indent > $_lastindent)); then
+        if (( _indent > _lastindent )); then
             # Increasing indentation level, add to prefix.
             _prefix=$_prefix$_lastkey\/
             _nodes[$_indent]=$_prefix
-        elif (($_indent < $_lastindent)); then
+        elif (( _indent < _lastindent )); then
             # Decreasing indentation level, fallback to earlier prefix.
             _prefix=${_nodes[$_indent]}
         fi
@@ -252,10 +252,10 @@ _parse_yaml()
             arrayobject)
                 # New array object begins
                 # Output key index at given indent
-                local _i=$(($_indent+$_arrayextraindent))
+                local _i=$(( _indent + _arrayextraindent ))
                 local _varname="_index_count${_prefix//\//_}"
                 local _count=${!_varname-0}
-                eval "local $_varname=$(($_count+1))"
+                eval "local $_varname=$(( _count + 1 ))"
                 local _subrows=()
                 # Reinsert the key value of first line to have it handled as a normal leaf.
                 if [[ -z $_key ]]; then
@@ -293,7 +293,7 @@ _parse_yaml()
 #==========
 _yaml_get_next()
 {
-    if (( $_rowindex >= $_numrows )); then
+    if (( _rowindex >= _numrows )); then
         return 1
     fi
 
@@ -444,7 +444,7 @@ _yaml_get_next()
             # Find out the nextindent level for an object row.
             local _yamlindent=0
             _yaml_find_nextindent
-            if (( $_yamlindent > $_indent )); then
+            if (( _yamlindent > _indent )); then
                 _rowtype="object"
             else
                 _rowtype="leaf"
@@ -548,7 +548,7 @@ _yaml_get_multiline()
     local _dopreprocess=$1
     shift
 
-    if (( $_rowindex >= $_numrows )); then
+    if (( _rowindex >= _numrows )); then
         return
     fi
     local _row=
@@ -556,20 +556,20 @@ _yaml_get_multiline()
     if [[ $_row =~ ^([\ ]+)([^\ ].*) ]]; then
         local _subindent=${#BASH_REMATCH[1]}
         local _subvalue=${BASH_REMATCH[2]}
-        if (($_subindent > $_indent)); then
+        if (( _subindent > _indent )); then
             _readahead+=("$_subvalue")
             while :; do
                 ((_rowindex+=1))
-                if (( $_rowindex >= $_numrows )); then
+                if (( _rowindex >= _numrows )); then
                     break
                 fi
                 _yaml_get_row $_rowindex $_dopreprocess
                 if [[ $_row =~ ^([\ ]+)([^\ ].*) || $_row =~ ^([\ ]{$_subindent})(.*) ]]; then
                     local _subindent2=${#BASH_REMATCH[1]}
-                    if (($_subindent2 < $_subindent)); then
+                    if (( _subindent2 < _subindent )); then
                         break
                     fi
-                    printf -v _subvalue "%*s%s" $(($_subindent2-$_subindent)) "" \
+                    printf -v _subvalue "%*s%s" $(( _subindent2 - _subindent)) "" \
                         "${BASH_REMATCH[2]}"
                     _readahead+=("$_subvalue")
                 else
@@ -629,7 +629,7 @@ _yaml_find_nextindent()
     _yamlindent=0
 
     while :; do
-        if (( $_i >= $_numrows )); then
+        if (( _i >= _numrows )); then
             return
         fi
         local _peekrow=${_allrows[$_i]}
@@ -647,7 +647,7 @@ _yaml_find_nextindent()
         fi
     done
     if [[ $_yamlindent -gt $_indent ]]; then
-        _nextindent=$(($_yamlindent-$_indent))
+        _nextindent=$(( _yamlindent - _indent))
     fi
 }
 
@@ -778,11 +778,11 @@ _match_node()
     _levels=${_nodepath//[^\/]}
     _levels=${#_levels}
     ((_levels-=1))
-    if (($_levels == 0)); then
+    if (( _levels == 0 )); then
         _nodes+=("/")
     else
         _match=""
-        for ((i=0; i<$_levels; i++)); do
+        for ((i=0; i < _levels; i++)); do
             if ((i < _levels-1)) || [[ $_includehidden == "1" ]]; then
                 _match="${_match}/[a-zA-Z0-9_]+"
             else
