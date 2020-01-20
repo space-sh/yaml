@@ -71,10 +71,28 @@ YAML_PARSE_IMPL()
     # shellcheck disable=2034
     IFS=$'\n' read -d '' -r -a _yamlrows < $_filepath
 
+    # Store current locale settings
+    local _unset_locale_flag=0
+    local _stored_locale=
+    if [ -z "${LC_ALL+unset}" ]; then
+        _unset_locale_flag=1
+    else
+        _stored_locale="${LC_ALL}"
+    fi
+    # Set locale to get traditional sort order (bytes comparison)
+    export LC_ALL="C"
+
     _parse_yaml "_yamlrows" "_parsedyaml" "_parsedyamlcompletion"
     _sort "_parsedyamlcompletion"
     eval "_parsedyamlnodelist${_YAML_PREFIX}${_YAML_NAMESPACE}=(\"\${_parsedyamlcompletion[@]}\")"
     _parsed_yaml_to_bash "_parsedyaml" "$_outvarname"
+
+    # Restore locale settings to their original state
+    if [ "${_unset_locale_flag}" -eq "1" ]; then
+        unset LC_ALL
+    else
+        LC_ALL="${_stored_locale}"
+    fi
 }
 
 #==========
