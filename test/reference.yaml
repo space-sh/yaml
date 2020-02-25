@@ -1,0 +1,6 @@
+volumes:
+    - name: nginx-files
+      type: config
+containers:
+    - name: webserver
+      image: imagename
