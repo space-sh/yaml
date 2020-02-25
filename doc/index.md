@@ -11,4 +11,5 @@ This module is meant to be used by other modules as a library.
 
 ## Dependencies
 
-None.
+External:  
++ bash
