@@ -13,3 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+---
+_info:
+    title: YAML module
+    desc: |
+        This helper module parses YAML files and make them available from code.
