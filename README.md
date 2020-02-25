@@ -1,4 +1,9 @@
-# 
+# YAML module | [![build status](https://gitlab.com/space-sh/yaml/badges/master/pipeline.svg)](https://gitlab.com/space-sh/yaml/commits/master)
+
+This helper module parses YAML files and make them available from code.
+
+
+
 # Functions 
 
 ## YAML\_PARSE()  
