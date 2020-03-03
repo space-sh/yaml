@@ -651,7 +651,6 @@ _yaml_find_nextindent()
             return
         fi
         local _peekrow=${_allrows[$_i]}
-        #_error PEEK $_peekrow
         ((_i+=1))
         if [[ $_peekrow =~ ^([\ ]*)\-([\ ]+)[a-zA-Z0-9_]+[\ ]*:[\ ]*.* ]]; then
             _yamlindent=$((${#BASH_REMATCH[1]}+${#BASH_REMATCH[2]}+1))
@@ -683,6 +682,8 @@ _yaml_find_nextindent()
 #========
 _list()
 {
+    SPACE_DEP="PRINT"
+
     local _output=$1
     shift
 
@@ -696,7 +697,7 @@ _list()
     shift || :
 
     if [[ ! $_path =~ (^/.+/$)|(^/$) ]]; then
-        _error "Malformed path ($_path) as argument to _list. Must start and end with a slash. Lonesome cowboy slashes are OK dough."
+        PRINT "Malformed path ($_path) as argument to _list. Must start and end with a slash. Lonesome cowboy slashes are OK dough." "error" 0
         return 1
     fi
 
