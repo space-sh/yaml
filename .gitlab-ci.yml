@@ -14,7 +14,7 @@ alpine_test_module:
     - space -f ./test/test.yaml /_tests/ -a -a -v4
 
 arch_test_module:
-  image: archlinux:20191205
+  image: archlinux:latest
   script:
     - pacman -Sy --noconfirm git which
     - git clone https://gitlab.com/space-sh/space.git
