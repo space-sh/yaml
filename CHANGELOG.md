@@ -1,5 +1,10 @@
 # Space Module change log - yaml
 
+## [1.0.2 - 2021-01-19]
+
+* Fix error message typo
+
+
 ## [1.0.1 - 2020-03-03]
 
 * Fix bug in `_list` function: change `_error` call to `PRINT`
