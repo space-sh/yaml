@@ -697,7 +697,7 @@ _list()
     shift || :
 
     if [[ ! $_path =~ (^/.+/$)|(^/$) ]]; then
-        PRINT "Malformed path ($_path) as argument to _list. Must start and end with a slash. Lonesome cowboy slashes are OK dough." "error" 0
+        PRINT "Malformed path ($_path) as argument to _list. Must start and end with a slash. Lonesome cowboy slashes are OK though." "error" 0
         return 1
     fi
 
